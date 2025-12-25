@@ -650,20 +650,101 @@ local SanityToggle = TabVisuals:CreateToggle({
 -- TAB: AUTO
 -- ============================================================================
 
-TabAuto:CreateButton({
-   Name = "Join Discord for auto farm!!!",
-   Callback = function()
-       local inviteCode = "qvHJg2g8" -- Twój kod zaproszenia
-       -- === PLAN B (KOPIOWANIE LINKU) ===
-       -- Jeśli metoda wyżej nie zadziała (np. gracz nie ma aplikacji desktopowej), kopiujemy link
-       setclipboard("https://discord.gg/d3rE8G8S")
-         Rayfield:Notify({
-              Title = "Invite Link Copied",
-              Content = "Discord invite link copied to clipboard!",
-              Image = "triangle-alert",
-              Duration = 10,
-          })
+TabAuto:CreateToggle({
+   Name = "Auto Find Ghost Room (Debug)",
+   CurrentValue = false,
+   Flag = "AutoFindGhost",
+   Callback = function(Value)
+       getgenv().AutoFindGhost = Value
+       
+       if Value then
+           task.spawn(function()
+               while getgenv().AutoFindGhost do
+                   print("[DEBUG] Rozpoczynam proces szukania ducha...")
+                   
+                   -- 1. Sprawdzenie czy mamy EMF Reader w ręce/modelu postaci
+                   local Equip = LocalPlayer.Character:FindFirstChild("EquipmentModel")
+                   local EMFTool = Equip and Equip:FindFirstChild("2") -- Dioda sygnalizacyjna
+                   local EMFStatus = Equip and Equip:FindFirstChild("1") -- Status włączenia
+                   
+                   if not EMFTool then 
+                       Rayfield:Notify({Title="DEBUG", Content="Ubierz EMF Reader!", Duration=3})
+                       print("[DEBUG] Błąd: Brak EMF Readera w ręce.")
+                       
+                       -- Próba wyłączenia toggle, żeby nie spamowało błędem
+                       -- (W Rayfield manualne wyłączenie toggle z kodu bywa trudne, więc po prostu czekamy)
+                       task.wait(2)
+                       continue 
+                   end
+
+                   -- 2. Włączenie EMF jeśli jest wyłączony (Logika z Xyde)
+                   if not EMFStatus or EMFStatus.Color ~= Color3.fromRGB(52, 142, 64) then
+                       print("[DEBUG] Włączam EMF Reader przez Remote...")
+                       ReplicatedStorage.Packages.Knit.Services.InventoryService.RF.Toggle:InvokeServer("EMF Reader")
+                       task.wait(0.5)
+                   end
+
+                   local StartPos = LocalPlayer.Character.HumanoidRootPart.CFrame
+                   Rayfield:Notify({Title="DEBUG", Content="Skanowanie pokoi...", Duration=2})
+                   print("[DEBUG] Zapisano pozycję startową. Rozpoczynam pętlę po pokojach.")
+
+                   local FoundRoom = nil
+
+                   -- 3. Pętla po pokojach (Logika z Xyde)
+                   if Map:FindFirstChild("Rooms") then
+                       for _, r in pairs(Map.Rooms:GetChildren()) do
+                           if not getgenv().AutoFindGhost then break end -- Przerwanie jeśli wyłączysz toggle
+
+                           if r:IsA("Folder") and r:FindFirstChild("Hitbox") then
+                               -- Teleport do pokoju
+                               LocalPlayer.Character.HumanoidRootPart.CFrame = r.Hitbox.CFrame
+                               Camera.CFrame = r.Hitbox.CFrame
+                               
+                               -- Debug: Gdzie jesteśmy
+                               -- print("[DEBUG] Sprawdzam: " .. r.Name) 
+                               
+                               task.wait(0.65) -- Czas na odświeżenie EMF (jak w oryginale)
+
+                               -- Sprawdzenie koloru diody (Logika z Xyde)
+                               -- Kolor aktywny: 131, 156, 49
+                               if EMFTool.Color == Color3.fromRGB(131, 156, 49) then
+                                   print("[DEBUG] Wykryto potencjalny sygnał w: " .. r.Name)
+                                   task.wait(1.0) -- Podwójne sprawdzenie dla pewności
+                                   
+                                   if EMFTool.Color == Color3.fromRGB(131, 156, 49) then
+                                       FoundRoom = r
+                                       break -- Przerywamy pętlę for
+                                   end
+                               end
+                           end
+                       end
+                   end
+
+                   -- 4. Obsługa wyniku
+                   LocalPlayer.Character.HumanoidRootPart.CFrame = StartPos -- Powrót na start
+                   
+                   if FoundRoom then
+                       getgenv().GhostRoom = FoundRoom
+                       
+                       -- Aktualizacja labela w zakładce Main (jeśli istnieje)
+                       if GhostRoomLabel then
+                           GhostRoomLabel:Set("Ghost Room: " .. FoundRoom.Name)
+                       end
+                       
+                       Rayfield:Notify({Title="SUKCES", Content="Pokój: " .. FoundRoom.Name, Image="ghost"})
+                       print("[DEBUG] ZNALEZIONO POKÓJ: " .. FoundRoom.Name)
+                       
+                       -- Wyłączamy pętlę po znalezieniu (zeby nie szukał w kółko tego samego)
+                       break 
+                   else
+                       print("[DEBUG] Nie znaleziono pokoju w tym przelocie. Ponawiam za 2s...")
+                       task.wait(2)
+                   end
+               end
+               
+               print("[DEBUG] Pętla Auto Find zakończona.")
+           end)
+       end
    end,
 })
-
 print("Xyde - Loaded")

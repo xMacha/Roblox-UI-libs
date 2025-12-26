@@ -324,8 +324,8 @@ TabMain:CreateButton({
 
         local last_pos = LocalPlayer.Character.HumanoidRootPart.CFrame
         LocalPlayer.Character.HumanoidRootPart.CFrame = getgenv().GhostRoom.Hitbox.CFrame
-        Rayfield:Notify({Title="Checking", Content="Wait 5s for temp..."})
-        task.wait(5)
+        Rayfield:Notify({Title="Checking", Content="Wait 9s for temp..."})
+        task.wait(9)
 
         local tempeture = tonumber(thermometer.Text:match("[-%d]+"))
         if tempeture and tempeture < 0 then

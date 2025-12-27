@@ -193,7 +193,7 @@ local Window = Rayfield:CreateWindow({
    ShowText = "Xyde",
       Discord = {
       Enabled = true,
-      Invite = "d3rE8G8S",
+      Invite = discord,
       RememberJoins = false},
    Theme = {
       TextColor = Color3.fromRGB(255, 255, 255), Background = Color3.fromRGB(15, 15, 15), Topbar = Color3.fromRGB(25, 25, 25), Shadow = Color3.fromRGB(0, 0, 0),

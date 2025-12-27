@@ -1,11 +1,21 @@
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/xMacha/xReaper-blox-fruit-script/refs/heads/main/Rayfield.lua'))()
-
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/xMacha/Roblox-GUI-libs/refs/heads/main/source/Rayfield.lua'))()
 local Window = Rayfield:CreateWindow({
-   Name = "Xreaper for blox fruit",
-   Icon = "skull",
-   LoadingTitle = "loading Xreaper for blox fruit....",
+   Name = "Xyde Script - Blox Fruits",
+   Icon = "scroll-text",
+   LoadingTitle = "Loading...",
    LoadingSubtitle = "by Macha",
-   Theme = "",
+      Theme = {
+      TextColor = Color3.fromRGB(255, 255, 255), Background = Color3.fromRGB(15, 15, 15), Topbar = Color3.fromRGB(25, 25, 25), Shadow = Color3.fromRGB(0, 0, 0),
+      NotificationBackground = Color3.fromRGB(20, 20, 20), NotificationActionsBackground = Color3.fromRGB(230, 230, 230), TabBackground = Color3.fromRGB(40, 40, 40),
+      TabStroke = Color3.fromRGB(160, 80, 220), TabBackgroundSelected = Color3.fromRGB(130, 40, 210), TabTextColor = Color3.fromRGB(255, 255, 255),
+      SelectedTabTextColor = Color3.fromRGB(255, 255, 255), ElementBackground = Color3.fromRGB(30, 30, 30), ElementBackgroundHover = Color3.fromRGB(40, 40, 40),
+      SecondaryElementBackground = Color3.fromRGB(25, 25, 25), ElementStroke = Color3.fromRGB(60, 60, 60), SecondaryElementStroke = Color3.fromRGB(40, 40, 40),
+      SliderBackground = Color3.fromRGB(60, 30, 80), SliderProgress = Color3.fromRGB(148, 0, 211), SliderStroke = Color3.fromRGB(180, 100, 230),
+      ToggleBackground = Color3.fromRGB(30, 30, 30), ToggleEnabled = Color3.fromRGB(148, 0, 211), ToggleDisabled = Color3.fromRGB(100, 100, 100),
+      ToggleEnabledStroke = Color3.fromRGB(180, 100, 230), ToggleDisabledStroke = Color3.fromRGB(125, 125, 125), ToggleEnabledOuterStroke = Color3.fromRGB(60, 20, 100),
+      ToggleDisabledOuterStroke = Color3.fromRGB(65, 65, 65), DropdownSelected = Color3.fromRGB(40, 30, 50), DropdownUnselected = Color3.fromRGB(30, 30, 30),
+      InputBackground = Color3.fromRGB(30, 30, 30), InputStroke = Color3.fromRGB(160, 80, 220), PlaceholderColor = Color3.fromRGB(178, 178, 178)
+   },
 
    DisableRayfieldPrompts = true,
    DisableBuildWarnings = true, 
@@ -18,8 +28,8 @@ local Window = Rayfield:CreateWindow({
 
    Discord = {
       Enabled = true, 
-      Invite = "EtjXnWjt",
-      RememberJoins = true 
+      Invite = discord,
+      RememberJoins = false
    },
 
    KeySystem = false, 
@@ -78,7 +88,7 @@ local Slider = PlayerTab:CreateSlider({
    Name = "Dash length",
    Range = {1, 800},
    Increment = 1,
-   Suffix = "Length",
+   Suffix = "Length",1
    CurrentValue = 1,
    Flag = "DashLenght", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
@@ -135,7 +145,7 @@ end)
 
 
 local Toggle = PlayerTab:CreateToggle({
-   Name = "Large Attack Range on melle",
+   Name = "Greater melee range",
    CurrentValue = false,
    Flag = "largeattackrange", -- Unikalny identyfikator
    Callback = function(Value)
@@ -456,10 +466,10 @@ local TeleportLocationButton = PlayerTab:CreateButton({
     end,
 })
 
-local Section = PlayerTab:CreateSection("Exit")
+local Section = PlayerTab:CreateSection("Misc")
 
 local Button = PlayerTab:CreateButton({
-   Name = "Exit",
+   Name = "Unload",
    Callback = function()
    Rayfield:Destroy()
    end,
@@ -687,9 +697,9 @@ local ESPFillcolorpicker = ESPTab:CreateColorPicker({
 -------------------------------------------------------------------
 -- MENU: Exit Button
 
-local Section = ESPTab:CreateSection("Exit")
+local Section = ESPTab:CreateSection("Misc")
 local ExitButtonESP = ESPTab:CreateButton({
-   Name = "Exit",
+   Name = "Unload",
    Callback = function()
        Rayfield:Destroy()
    end,

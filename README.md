@@ -9,6 +9,6 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/xMacha/Xyde/refs/head
 ```
 Executor polecam pobrac z https://whatexpsare.online/
 # How to get key
-Żeby zdobyć klucz trzeba
+Żeby zdobyć klucz trzeba wejsc na strone https://macha.lol i przejsc przez work.ini
 
-**Nasz (Discord)[https://discord.gg/p9jCxg5m]**
+**Nasz [Discord](https://discord.gg/p9jCxg5m)**
